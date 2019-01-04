@@ -1,0 +1,21 @@
+version: "3.5"
+
+services:
+  nginx:
+    build:
+      context: ./docker/nginx
+    ports:
+      - 80:80
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async-connect: "true"
+        tag: "fluenttest"
+  fluentd:
+    build:
+      context: ./docker/fluentd
+    depends_on:
+      - nginx
+    ports:
+      - 24224:24224
